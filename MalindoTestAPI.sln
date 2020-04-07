@@ -3,7 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.29926.136
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MalindoTestAPI", "MalindoTestAPI.csproj", "{5090C1E4-0946-48C1-856E-768612DE94D6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MalindoTestAPI", "MalindoTestApi\MalindoTestAPI.csproj", "{AEFC37CC-212B-408D-AC9C-896A3F5980DC}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MalindoTestApi.Tests", "MalindoTestApi.Tests\MalindoTestApi.Tests.csproj", "{ED06311F-A0B9-4430-8F8F-9F78146DE17A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -11,10 +13,14 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{5090C1E4-0946-48C1-856E-768612DE94D6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{5090C1E4-0946-48C1-856E-768612DE94D6}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{5090C1E4-0946-48C1-856E-768612DE94D6}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{5090C1E4-0946-48C1-856E-768612DE94D6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AEFC37CC-212B-408D-AC9C-896A3F5980DC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AEFC37CC-212B-408D-AC9C-896A3F5980DC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AEFC37CC-212B-408D-AC9C-896A3F5980DC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AEFC37CC-212B-408D-AC9C-896A3F5980DC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{ED06311F-A0B9-4430-8F8F-9F78146DE17A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{ED06311F-A0B9-4430-8F8F-9F78146DE17A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{ED06311F-A0B9-4430-8F8F-9F78146DE17A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{ED06311F-A0B9-4430-8F8F-9F78146DE17A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

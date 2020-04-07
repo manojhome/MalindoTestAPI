@@ -1,10 +1,9 @@
-﻿using System;
+﻿using MalindoTestAPI.Models;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata;
 
-namespace MalindoTestAPI.Models
+namespace MalindoTestAPI.Data
 {
-    public partial class CustomerContext : DbContext
+    public class CustomerContext : DbContext
     {
         public CustomerContext()
         {
@@ -51,9 +50,9 @@ namespace MalindoTestAPI.Models
                     .HasMaxLength(8);
             });
 
-            OnModelCreatingPartial(modelBuilder);
+ 
         }
 
-        partial void OnModelCreatingPartial(ModelBuilder modelBuilder);
+        
     }
 }
