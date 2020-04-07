@@ -120,11 +120,11 @@ BEGIN
 
 CREATE TABLE [Customer](
 [CustomerID] [int] IDENTITY(1,1) NOT FOR REPLICATION NOT NULL,
-[Title] [nvarchar](8) NULL,
+[Title] [nvarchar](8) NOT NULL,
 [FirstName] [nvarchar](256) NOT NULL,
 [LastName] [nvarchar](100) NOT NULL,
 [EmailAddress] [nvarchar](100) NOT NULL,
-[DateOfBirth] [datetime] NULL,
+[DateOfBirth] [datetime] NOT NULL,
 [MobilePhoneNo] [nvarchar](25) NULL,
 [StreetAddress] [nvarchar](255) NULL,
 [SuburbCity] [nvarchar](100) NULL,
