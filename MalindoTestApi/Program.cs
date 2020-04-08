@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Hosting;
 using Serilog;
+using System;
 
 namespace MalindoTestAPI
 {
@@ -14,7 +15,11 @@ namespace MalindoTestAPI
             Log.Logger = new LoggerConfiguration()
                 .MinimumLevel.Debug()
                 .WriteTo.Console()
-                .WriteTo.File("Logs\\CustomerErrorLog.txt", rollingInterval: RollingInterval.Day)
+                .WriteTo.File("Logs\\CustomerErrorLog.txt", 
+                 rollingInterval: RollingInterval.Day,
+                 rollOnFileSizeLimit: true,
+                 shared: true,
+                 flushToDiskInterval: TimeSpan.FromSeconds(1))
                 .CreateLogger();
 
             CreateHostBuilder(args).Build().Run();
