@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using MalindoTestAPI.Models;
 using Microsoft.EntityFrameworkCore;
+using Serilog;
 
 namespace MalindoTestAPI.Data
 {
@@ -44,8 +45,10 @@ namespace MalindoTestAPI.Data
                 var result = await _context.SaveChangesAsync();
                 return result;
             }
-            catch (DbUpdateConcurrencyException)
+            catch (DbUpdateConcurrencyException ex)
             {
+                Log.Logger.Error("DB Error when updating customer data for customer id : {@CustomerId} {@Error}", id, ex);
+
                 if (!CustomerExists(id))
                 {
                     return -1;
@@ -63,8 +66,9 @@ namespace MalindoTestAPI.Data
                 var resultSave = await _context.SaveChangesAsync();
                 return resultSave;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                Log.Logger.Error("DB Error when adding customer data {@Error}", ex);
                 return -1;
             }
         }
@@ -83,8 +87,9 @@ namespace MalindoTestAPI.Data
                 await _context.SaveChangesAsync();
                 return customer;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                Log.Logger.Error("DB Error when deleting customer data for customer id : {@CustomerId} {@Error}", id, ex);
                 return null;
             }
         }
