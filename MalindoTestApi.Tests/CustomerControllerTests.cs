@@ -5,22 +5,31 @@ using MalindoTestAPI.Data;
 using MalindoTestAPI.Models;
 using Microsoft.AspNetCore.Mvc;
 using Xunit;
+using MalindoTestAPI.Auth;
+using NSubstitute;
 
 namespace MalindoTestApi.Tests
 {
     public class CustomerControllerTests
-    {
-        CustomersController _controller;
-        ICustomerService _service;
+    {        
+        private readonly ICustomerService _service;
+        private readonly IAuthentication _auth;
+
+        private CustomersController _controller;
 
         public CustomerControllerTests()
         {
             _service = new CustomerServiceMock();
-            _controller = new CustomersController(_service);
+            _auth = Substitute.For<IAuthentication>();
+            _controller = new CustomersController(_service, _auth);
         }
+
         [Fact]
         public void Get_WhenCalled_ReturnsOkResult()
         {
+            // Arrange 
+            _auth.IsAuthenticated(null).Returns(true);
+
             // Act
             var okResult = _controller.GetCustomer().Result;
 
@@ -31,6 +40,9 @@ namespace MalindoTestApi.Tests
         [Fact]
         public void Get_WhenCalled_ReturnsAllItems()
         {
+            // Arrange 
+            _auth.IsAuthenticated(null).Returns(true);
+
             // Act
             var okResult = _controller.GetCustomer().Result ;
 
@@ -42,6 +54,9 @@ namespace MalindoTestApi.Tests
         [Fact]
         public void GetById_UnknownIdPassed_ReturnsNotFoundResult()
         {
+            // Arrange 
+            _auth.IsAuthenticated(null).Returns(true);
+
             // Act
             var notFoundResult = _controller.GetCustomer(5).Result;
 
@@ -52,7 +67,8 @@ namespace MalindoTestApi.Tests
         [Fact]
         public void GetById_ExistingIdPassed_ReturnsOkResult()
         {
-            // Arrange
+            // Arrange 
+            _auth.IsAuthenticated(null).Returns(true);
             var testId = 1;
 
             // Act
@@ -65,7 +81,8 @@ namespace MalindoTestApi.Tests
         [Fact]
         public void GetById_ExistingIdPassed_ReturnsRightItem()
         {
-            // Arrange
+            // Arrange 
+            _auth.IsAuthenticated(null).Returns(true);
             var testId = 2;
 
             // Act
@@ -80,7 +97,8 @@ namespace MalindoTestApi.Tests
         [Fact]
         public void Add_InvalidObjectPassed_ReturnsBadRequest()
         {
-            // Arrange
+            // Arrange 
+            _auth.IsAuthenticated(null).Returns(true);
             var nameMissingItem = new Customer()
             {
                 PostCode = "23423",
@@ -92,14 +110,15 @@ namespace MalindoTestApi.Tests
             var badResponse = _controller.PostCustomer(nameMissingItem).Result;
 
             // Assert
-            Assert.IsType<BadRequestResult>(badResponse.Result);
+            Assert.IsType<BadRequestObjectResult>(badResponse.Result);
         }
 
 
         [Fact]
         public void Add_ValidObjectPassed_ReturnsCreatedResponse()
         {
-            // Arrange
+            // Arrange 
+            _auth.IsAuthenticated(null).Returns(true);
             Customer testItem = new Customer()
             {
                 Title = "Mr",
@@ -120,7 +139,8 @@ namespace MalindoTestApi.Tests
         [Fact]
         public void Add_ValidObjectPassed_ReturnedResponseHasCreatedItem()
         {
-            // Arrange
+            // Arrange 
+            _auth.IsAuthenticated(null).Returns(true);
             var testItem = new Customer()
             {
                 Title = "Mr",
@@ -143,7 +163,8 @@ namespace MalindoTestApi.Tests
         [Fact]
         public void Remove_NotExistingIdPassed_ReturnsNotFoundResponse()
         {
-            // Arrange
+            // Arrange 
+            _auth.IsAuthenticated(null).Returns(true);
             var notExistingId = 5;
 
             // Act
@@ -156,7 +177,8 @@ namespace MalindoTestApi.Tests
         [Fact]
         public void Remove_ExistingIdPassed_ReturnsOkResult()
         {
-            // Arrange
+            // Arrange 
+            _auth.IsAuthenticated(null).Returns(true);
             var existingId = 2;
 
             // Act
@@ -168,7 +190,8 @@ namespace MalindoTestApi.Tests
         [Fact]
         public void Remove_ExistingIdPassed_RemovesOneItem()
         {
-            // Arrange
+            // Arrange 
+            _auth.IsAuthenticated(null).Returns(true);
             var existingId = 2;
 
             // Act
