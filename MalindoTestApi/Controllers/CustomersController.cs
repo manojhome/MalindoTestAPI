@@ -5,6 +5,8 @@ using MalindoTestAPI.Data;
 using Microsoft.AspNetCore.Mvc;
 using MalindoTestAPI.Models;
 using Microsoft.AspNetCore.Http;
+using System;
+using Serilog;
 
 namespace MalindoTestAPI.Controllers
 {
@@ -24,8 +26,16 @@ namespace MalindoTestAPI.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<ActionResult<IEnumerable<Customer>>> GetCustomer()
         {
-             var result = await _service.GetAll();
-             return Ok(result);
+            try
+            { 
+                var result = await _service.GetAll();
+                return Ok(result);
+            }
+            catch(Exception ex)
+            {
+                Log.Logger.Error("Error when retrieving customers data {@Error}", ex);
+                return NotFound("Customers Data Not Found!");
+            }            
         }
 
         // GET: api/Customers/5
@@ -34,14 +44,21 @@ namespace MalindoTestAPI.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<ActionResult<Customer>> GetCustomer(int id)
         {
-            
-            var customer = await _service.GetById(id);
-            if (customer == null)
+            try
             {
-                return NotFound();
-            }
+                var customer = await _service.GetById(id);
+                if (customer == null)
+                {
+                    return NotFound();
+                }
 
-            return Ok(customer);
+                return Ok(customer);
+            }
+            catch (Exception ex)
+            {
+                Log.Logger.Error("Error when retrieving customer data for customer id : {@CustomerId}  {@Error}", id, ex);
+                return NotFound("Customer Not Found!");
+            }
         }
 
 
@@ -52,20 +69,27 @@ namespace MalindoTestAPI.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> PutCustomer(int id, Customer customer)
         {
-            if (id != customer.CustomerId && !ModelState.IsValid)
+            try
             {
-                return BadRequest();
-            }
+                if (id != customer.CustomerId && !ModelState.IsValid)
+                {
+                    return BadRequest();
+                }
 
-            var result = await _service.Put(id, customer);
-            if (result < 0)
+                var result = await _service.Put(id, customer);
+                if (result < 0)
+                {
+                    return NotFound("Customer Not Found!");
+                }
+
+                return NoContent();
+            }
+            catch (Exception ex)
             {
-                return NotFound();
+                Log.Logger.Error("Error when updating customer data for customer id : {@CustomerId}  {@Error}", id, ex);
+                return StatusCode(500);
             }
-
-            return NoContent();
-        }
-        
+        }        
 
 
         [HttpPost]
@@ -75,18 +99,26 @@ namespace MalindoTestAPI.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<ActionResult<Customer>> PostCustomer(Customer customer)
         {
-            if (!ModelState.IsValid)
+            try
             {
-                return BadRequest();
-            }
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest();
+                }
 
-            var result = await _service.Add(customer);
-            if (result < 0)
+                var result = await _service.Add(customer);
+                if (result < 0)
+                {
+                    return NotFound();
+                }
+
+                return CreatedAtAction("GetCustomer", new { id = customer.CustomerId }, customer);
+            }
+            catch (Exception ex)
             {
-                return NotFound();
+                Log.Logger.Error("Error when adding customer data {@Error}", ex);
+                return StatusCode(500);
             }
-
-            return CreatedAtAction("GetCustomer", new { id = customer.CustomerId }, customer);
         }
 
         // DELETE: api/Customers/5
@@ -95,13 +127,20 @@ namespace MalindoTestAPI.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<ActionResult<Customer>> DeleteCustomer(int id)
         {
-            var result = await _service.Remove(id);
-            if (result == null)
+            try
             {
-                return NotFound();
+                var result = await _service.Remove(id);
+                if (result == null)
+                {
+                    return NotFound();
+                }
+                return Ok(result);
             }
-            return Ok(result);
+            catch (Exception ex)
+            {
+                Log.Logger.Error("Error when deleting customer data for the customer id : {@CustomerId} {@Error}", id, ex);
+                return StatusCode(500);
+            }
         }
-
     }
 }
