@@ -8,6 +8,9 @@ namespace MalindoTestAPI
     {
         public static void Main(string[] args)
         {
+
+            CreateHostBuilder(args).Build().Run();           
+
             Log.Logger = new LoggerConfiguration()
                 .MinimumLevel.Debug()
                 .WriteTo.Console()
@@ -15,6 +18,7 @@ namespace MalindoTestAPI
                 .CreateLogger();
 
             CreateHostBuilder(args).Build().Run();
+
         }
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>
