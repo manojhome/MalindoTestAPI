@@ -38,6 +38,7 @@ namespace MalindoTestAPI
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
+                app.UseCors("ReactPolicy");
             }
 
 
