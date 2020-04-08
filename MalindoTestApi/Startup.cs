@@ -6,6 +6,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
+using MalindoTestAPI.Auth;
 
 namespace MalindoTestAPI
 {
@@ -23,6 +24,7 @@ namespace MalindoTestAPI
         {
             services.AddControllers();
             services.AddScoped<ICustomerService, CustomerService>();
+            services.AddScoped<IAuthentication, Authentication>();
             services.AddDbContext<CustomerContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("CustomerConnection")));
 

@@ -7,6 +7,7 @@ using MalindoTestAPI.Models;
 using Microsoft.AspNetCore.Http;
 using System;
 using Serilog;
+using MalindoTestAPI.Auth;
 
 namespace MalindoTestAPI.Controllers
 {
@@ -15,10 +16,12 @@ namespace MalindoTestAPI.Controllers
     public class CustomersController : ControllerBase
     {
         private readonly ICustomerService _service;
- 
-        public CustomersController(ICustomerService service)
+        private readonly IAuthentication _auth;
+
+        public CustomersController(ICustomerService service, IAuthentication auth)
         {
             _service = service;
+            _auth = auth;
         }
 
         // GET: api/Customers
@@ -26,16 +29,32 @@ namespace MalindoTestAPI.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<ActionResult<IEnumerable<Customer>>> GetCustomer()
         {
+            List<Customer> result;
+
             try
-            { 
-                var result = await _service.GetAll();
-                return Ok(result);
+            {
+                // simple auth. This can be properly done through some Authentication service like OAuth
+                var isAuthenticated = _auth.IsAuthenticated(Request);
+
+                if (!isAuthenticated)
+                {
+                    return Unauthorized("Unauthorized Access!");
+                }
+
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest(ModelState);
+                }
+
+                result = await _service.GetAll();                
             }
             catch(Exception ex)
             {
                 Log.Logger.Error("Error when retrieving customers data {@Error}", ex);
                 return NotFound("Customers Data Not Found!");
-            }            
+            }
+
+            return Ok(result);
         }
 
         // GET: api/Customers/5
@@ -46,6 +65,19 @@ namespace MalindoTestAPI.Controllers
         {
             try
             {
+                // simple auth. This can be properly done through some Authentication service like OAuth
+                var isAuthenticated = _auth.IsAuthenticated(Request);                
+
+                if (!isAuthenticated)
+                {
+                    return Unauthorized("Unauthorized Access!");
+                }
+
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest(ModelState);
+                }
+
                 var customer = await _service.GetById(id);
                 if (customer == null)
                 {
@@ -71,6 +103,14 @@ namespace MalindoTestAPI.Controllers
         {
             try
             {
+                // simple auth. This can be properly done through some Authentication service like OAuth
+                var isAuthenticated = _auth.IsAuthenticated(Request);
+
+                if (!isAuthenticated)
+                {
+                    return Unauthorized("Unauthorized Access!");
+                }
+
                 if (id != customer.CustomerId && !ModelState.IsValid)
                 {
                     return BadRequest();
@@ -101,9 +141,17 @@ namespace MalindoTestAPI.Controllers
         {
             try
             {
+                // simple auth. This can be properly done through some Authentication service like OAuth
+                var isAuthenticated = _auth.IsAuthenticated(Request);
+
+                if (!isAuthenticated)
+                {
+                    return Unauthorized("Unauthorized Access!");
+                }
+
                 if (!ModelState.IsValid)
                 {
-                    return BadRequest();
+                    return BadRequest(ModelState);
                 }
 
                 var result = await _service.Add(customer);
@@ -129,6 +177,19 @@ namespace MalindoTestAPI.Controllers
         {
             try
             {
+                // simple auth. This can be properly done through some Authentication service like OAuth
+                var isAuthenticated = _auth.IsAuthenticated(Request);
+
+                if (!isAuthenticated)
+                {
+                    return Unauthorized("Unauthorized Access!");
+                }
+
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest(ModelState);
+                }
+
                 var result = await _service.Remove(id);
                 if (result == null)
                 {
